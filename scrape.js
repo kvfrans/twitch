@@ -1,5 +1,6 @@
 var tmi = require("tmi.js")
 
+
 var options = {
     options: {
         debug: false
@@ -11,7 +12,7 @@ var options = {
         username: "TacoExplosion",
         password: "oauth:l0utik6fryye3pcus4gpo6uje5ba7f"
     },
-    channels: ["#imaqtpie"]
+    channels: ["#imaqtpie","ELEAGUE TV","Kolento","WagamamaTV","EULCS1","ODPixel","LIRIK"]
 };
 
 
@@ -181,15 +182,53 @@ var client = new tmi.client(options);
 // Connect the client to the server..
 client.connect();
 
-if (emojis.contains("YouWHY") {
-  console.log("same")
+
+var data = {};
+
+for(var i = 0; i < emojis.length; i++)
+{
+    data[emojis[i]] = [];
 }
+
+var counter = 0;
+
+var jsonfile = require('jsonfile')
+var file = 'data.json'
+
 
 
 client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
     if (self) return;
 
-    // console.log(message)
-    // Do your stuff.
+    var lastemote = "none";
+
+    for(var i = 0; i < emojis.length; i++)
+    {
+        if(message.indexOf(emojis[i]) != -1)
+        {
+            message = message.split(emojis[i]).join("");
+
+            lastemote = emojis[i];
+        }
+    }
+    if(message.indexOf("\'" == -1 && message.indexOf("\"" == -1)))
+    {
+        if(lastemote != "none" && message.length > 3)
+        {
+            console.log(lastemote + ": " + message);
+            // console.log("lastemote is " + lastemote);
+            data[lastemote].push(message);
+            // console.log(data);
+            console.log(counter);
+            if(counter % 50 == 0)
+            {
+                jsonfile.writeFile(file, data, function (err) {
+                  console.error(err)
+                })
+            }
+            counter++;
+        }
+    }
+
 });
