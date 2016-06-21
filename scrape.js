@@ -2,7 +2,7 @@ var tmi = require("tmi.js")
 
 var options = {
     options: {
-        debug: true
+        debug: false
     },
     connection: {
         reconnect: true
@@ -24,5 +24,11 @@ client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
     if (self) return;
 
-    // Do your stuff.
+    for(var i = 0; i < emojis.count(); i++)
+    {
+        if(message.indexOf(emojis[i]) != -1)
+        {
+            console.log(emojis[i] + ": " + message);
+        }
+    }
 });
