@@ -195,6 +195,7 @@ for i in xrange(161):
         arr[count] = word2d
         count += 1
 
-# print labels[8000]
+np.random.shuffle(arr)
+np.random.shuffle(labels)
 np.save("data.npy", arr)
 np.save("labels.npy", labels)
