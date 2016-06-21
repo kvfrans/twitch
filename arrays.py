@@ -175,11 +175,11 @@ print a
 
 count = 0
 arr = np.zeros([12201,10])
-labels = np.zeros([122010])
+labels = np.zeros([12201,10])
 for i in xrange(161):
     for k in data[emojis[i]]:
         # labelvec = np.zeros([161])
-        labels[count:count+10] = i
+        labels[count,:] = i
         # labels[count] = labelvec
         wordarray = np.zeros([10], dtype=np.int)
         words = k.split()
