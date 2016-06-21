@@ -1,12 +1,5 @@
 var tmi = require("tmi.js")
 
-client.on("chat", function (channel, userstate, message, self) {
-    // Don't listen to my own messages..
-    if (self) return;
-
-    // Do your stuff.
-});
-
 var options = {
     options: {
         debug: true
@@ -30,8 +23,6 @@ client.connect();
 client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
     if (self) return;
-
-    console.log(message);
 
     // Do your stuff.
 });
