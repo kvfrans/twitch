@@ -175,12 +175,12 @@ print a
 
 count = 0
 arr = np.zeros([12201,10])
-labels = np.zeros([12201,161])
+labels = np.zeros([122010])
 for i in xrange(161):
     for k in data[emojis[i]]:
-        labelvec = np.zeros([161])
-        labelvec[i] = 1
-        labels[count] = labelvec
+        # labelvec = np.zeros([161])
+        labels[count:count+10] = i
+        # labels[count] = labelvec
         wordarray = np.zeros([10], dtype=np.int)
         words = k.split()
         for l in xrange(min(10,len(words))):
@@ -191,6 +191,8 @@ for i in xrange(161):
         # print np.shape(word2d)
         arr[count] = wordarray
         count += 1
+
+# print labels[2000:2010]
 
 np.random.shuffle(arr)
 np.random.shuffle(labels)
