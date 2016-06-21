@@ -194,6 +194,9 @@ for(var i = 0; i < Object.keys(topwords).length; i++) {
   }
 }
 console.log(Object.keys(topwords).length);
+for(var i = 0; i < Object.keys(topwords).length; i++) {
+  topwords[Object.keys(topwords)[i]] = i
+}
 jsonfile.writeFile(file, topwords, function (err) {
-  console.error(err)
+  // console.error(err)
 })
