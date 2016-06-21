@@ -181,11 +181,15 @@ var client = new tmi.client(options);
 // Connect the client to the server..
 client.connect();
 
+if (emojis.contains("YouWHY") {
+  console.log("same")
+}
+
 
 client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
     if (self) return;
 
-    console.log(message)
+    // console.log(message)
     // Do your stuff.
 });
