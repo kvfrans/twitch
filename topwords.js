@@ -170,33 +170,50 @@ var getNthWord = function(string, n){
 
 var json = require('./data.json');
 for(var i = 0; i < emojis.length; i++) {
-  var body = json[emojis[i]].toString()
-  var word_count = body.split(/\s+/).length
-  // console.log("second word is " + getNthWord(body, 1));
-  // console.log("second word is second".split("second").length-1);
-  for(var i = 0; i < word_count; i++) {
-    word = getNthWord(body, i).split(",").join("")
-    if(topwords[word] == null) { //not in the dict yet
-      var occurences = body.split(word).length;
-      topwords[word] = occurences;
+    var body = json[emojis[i]].toString()
+    var word_count = body.split(/\s+/).length
+    // console.log("second word is " + getNthWord(body, 1));
+    // console.log("second word is second".split("second").length-1);
+    for(var i = 0; i < word_count; i++) {
+        word = getNthWord(body, i).split(",").join("")
+        if(word.length >= 3)
+        {
+            if(topwords[word] == null) { //not in the dict yet
+                var occurences = body.split(word).length;
+                topwords[word] = occurences;
+            }
+            else {
+                var occurences = body.split(word).length;
+                // console.log("NotLikeThis" + topwords[word]);
+                topwords[word] = topwords[word] + occurences;
+            }
+        }
     }
-    else {
-      var occurences = body.split(word).length;
-      // console.log("NotLikeThis" + topwords[word]);
-      topwords[word] = topwords[word] + occurences;
-    }
-  }
 }
 console.log(Object.keys(topwords).length);
+console.log(Object.keys(topwords)[0]);
 for(var i = 0; i < Object.keys(topwords).length; i++) {
-  if(topwords[Object.keys(topwords)[i]] <= 3) {
-    delete topwords[Object.keys(topwords)[i]]
-  }
+    if(topwords[Object.keys(topwords)[i]] <= 3) {
+        delete topwords[Object.keys(topwords)[i]]
+    }
+    else if(Object.keys(topwords)[i].length < 3)
+    {
+        // console.log(Object.keys(topwords)[i])
+        delete topwords[Object.keys(topwords)[i]]
+    }
+    else
+    {
+        console.log(Object.keys(topwords)[i])
+    }
 }
-console.log(Object.keys(topwords).length);
-for(var i = 0; i < Object.keys(topwords).length; i++) {
-  topwords[Object.keys(topwords)[i]] = i
-}
+
+console.log("---")
+console.log("1".length)
+console.log(Object.keys(topwords)[0].length)
+// console.log(Object.keys(topwords).length);
+// for(var i = 0; i < Object.keys(topwords).length; i++) {
+//   topwords[Object.keys(topwords)[i]] = i
+// }
 jsonfile.writeFile(file, topwords, function (err) {
   // console.error(err)
 })
