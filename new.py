@@ -133,7 +133,7 @@ else:
         ss = ""
         for k in inwordslist:
             for key, item in wordsdata:
-                if item == k
+                if item == k:
                     ss = ss + " " + key
         print ss
 
