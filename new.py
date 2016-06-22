@@ -143,9 +143,10 @@ def classify():
     words = message.split()
     print words
     for l in xrange(min(10,len(words))):
-        if words[l] in wordsdata:
-            print wordsdata[words[l]]
-            wordarray[:][l][wordsdata[words[l]]] = 1
+        word = words[l].lower()
+        if word in wordsdata:
+            print wordsdata[word]
+            wordarray[:][l][wordsdata[word] = 1
 
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
