@@ -206,7 +206,6 @@ for(var i = 0; i < Object.keys(topwords).length; i++) {
         // console.log("what " +Object.keys(topwords)[i])
     }
 }
-
 console.log("---")
 console.log(Object.keys(topwords)[0].length)
 console.log(Object.keys(topwords).length);
