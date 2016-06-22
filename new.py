@@ -122,8 +122,10 @@ else:
     y = train_labels[rand:rand+64,:]
     preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
 
-    print np.argmax(x[0],axis=1)
-    print np.argmax(y[0],axis=0)
+    print "checking alignment"
+    for i in xrange(20):
+        print np.argmax(x[i],axis=1)
+        print np.argmax(y[i],axis=0)
 
     print np.shape(y)
     print np.shape(preds)
