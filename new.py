@@ -128,7 +128,7 @@ else:
     print "checking alignment"
     for i in xrange(20):
         inwords = np.argmax(x[i],axis=1)
-        inwordlist = inwords.tolist()
+        inwordslist = inwords.tolist()
         print inwords
         ss = ""
         for k in inwordslist:
