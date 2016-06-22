@@ -210,6 +210,6 @@ print np.shape(reallabels)
 print realarr[0]
 
 np.random.shuffle(realarr)
-np.random.shuffle(labels)
+np.random.shuffle(reallabels)
 np.save("data.npy", realarr)
-np.save("labels.npy", labels)
+np.save("labels.npy", reallabels)
