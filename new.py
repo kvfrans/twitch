@@ -153,7 +153,7 @@ def classify():
     np.set_printoptions(threshold=np.nan)
     emojipreds = np.argmax(preds,axis=1)[0]
     print emojipreds
-    print preds
+    print preds[0]
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
     # return
