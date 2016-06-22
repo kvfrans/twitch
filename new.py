@@ -178,6 +178,6 @@ def classify():
     # return json_string + "<br>" + str(np.argmax(preds))
     # return
     # return "test"
-    return emojipreds
+    return str(emojipreds)
 
 run(host='localhost', port=8080)
