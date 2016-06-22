@@ -210,7 +210,11 @@ print np.shape(reallabels)
 # print labels[800]
 print realarr[0]
 
+
+rng_state = np.random.get_state()
 np.random.shuffle(realarr)
+np.random.set_state(rng_state)
 np.random.shuffle(reallabels)
+
 np.save("data.npy", realarr)
 np.save("labels.npy", reallabels)
