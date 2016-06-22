@@ -231,5 +231,5 @@ for i in xrange(count):
 print np.argmax(realarr[shuffledindex][0])
 print np.argmax(reallabels[shuffledindex])
 
- np.save("data.npy", realarr)
- np.save("labels.npy", reallabels)
+np.save("data.npy", realarr)
+np.save("labels.npy", reallabels)
