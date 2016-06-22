@@ -188,15 +188,16 @@ for(var i = 0; i < emojis.length; i++) {
   }
 }
 console.log(Object.keys(topwords).length);
+console.log(Object.keys(topwords)[0]);
 for(var i = 0; i < Object.keys(topwords).length; i++) {
-  if(topwords[Object.keys(topwords)[i]] <= 3) {
+  if(topwords[Object.keys(topwords)[i]] <= 3 || Object.keys(topwords)[i].length < 3) {
     delete topwords[Object.keys(topwords)[i]]
   }
 }
 console.log(Object.keys(topwords).length);
-for(var i = 0; i < Object.keys(topwords).length; i++) {
-  topwords[Object.keys(topwords)[i]] = i
-}
+// for(var i = 0; i < Object.keys(topwords).length; i++) {
+//   topwords[Object.keys(topwords)[i]] = i
+// }
 jsonfile.writeFile(file, topwords, function (err) {
   // console.error(err)
 })
