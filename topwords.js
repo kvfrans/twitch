@@ -207,13 +207,13 @@ for(var i = 0; i < Object.keys(topwords).length; i++) {
     }
 }
 
-console.log("---")
-console.log("1".length)
-console.log(Object.keys(topwords)[0].length)
-// console.log(Object.keys(topwords).length);
-// for(var i = 0; i < Object.keys(topwords).length; i++) {
-//   topwords[Object.keys(topwords)[i]] = i
-// }
+// console.log("---")
+// console.log("1".length)
+// console.log(Object.keys(topwords)[0].length)
+console.log(Object.keys(topwords).length);
+for(var i = 0; i < Object.keys(topwords).length; i++) {
+    topwords[Object.keys(topwords)[i]] = i
+}
 jsonfile.writeFile(file, topwords, function (err) {
   // console.error(err)
 })

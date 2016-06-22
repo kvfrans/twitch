@@ -5,7 +5,9 @@ import sets
 import tensorflow as tf
 from random import randint
 import numpy as np
+from bottle import route, run, template, static_file, get, post, request
 import os
+import json
 # from tensorflow.models.rnn import rnn_cell
 # from tensorflow.models.rnn import rnn
 
@@ -80,43 +82,57 @@ class SequenceClassification:
         return tf.Variable(weight), tf.Variable(bias)
 
 
-if __name__ == '__main__':
-    # We treat images as sequences of pixel rows.
+num_classes = 161
+data = tf.placeholder(tf.float32, [None, 10, 1150])
+target = tf.placeholder(tf.float32, [None, 161])
+dropout = tf.placeholder(tf.float32)
+
+model = SequenceClassification(data, target, dropout)
+sess = tf.Session()
+sess.run(tf.initialize_all_variables())
+
+saver = tf.train.Saver()
+
+istrain = False
+
+if istrain:
     train_data = np.load("data.npy")
     train_labels = np.load("labels.npy")
-    num_classes = 161
-    data = tf.placeholder(tf.float32, [None, 10, 1150])
-    target = tf.placeholder(tf.float32, [None, 161])
-    dropout = tf.placeholder(tf.float32)
-
-    model = SequenceClassification(data, target, dropout)
-    sess = tf.Session()
-    sess.run(tf.initialize_all_variables())
-
-    saver = tf.train.Saver()
-
-    istrain = False
-
     print np.shape(train_data)
-    if istrain:
-        for epoch in range(1000):
-            for i in range(440):
-                rand = i
-                # rand = randint(0,6100)
-                x = train_data[rand:rand+64,:,:]
-                y = train_labels[rand:rand+64,:]
-                sess.run(model.optimize, {data: x, target: y, dropout: 0.5})
-                # print i
-                if i % 50 == 0:
-                    error, co = sess.run([model.error, model.cost], {data: x, target: y, dropout: 1})
-                    print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
+    for epoch in range(1000):
+        for i in range(440):
+            rand = i
+            # rand = randint(0,6100)
+            x = train_data[rand:rand+64,:,:]
+            y = train_labels[rand:rand+64,:]
+            sess.run(model.optimize, {data: x, target: y, dropout: 0.5})
+            # print i
+            if i % 50 == 0:
+                error, co = sess.run([model.error, model.cost], {data: x, target: y, dropout: 1})
+                print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
 
-            saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
-    else:
-        saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
-        rand = 300
-        x = train_data[rand:rand+64,:,:]
-        y = train_labels[rand:rand+64,:]
-        preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})
-        print np.argmax(y,axis=1)
-        print np.argmax(preds,axis=1)
+        saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
+
+
+@route('/')
+def index():
+    return "same"
+
+@post('/classify') # or @route('/login', method='POST')
+def classify():
+    message = request.forms.get('message')
+    wordarray = np.zeros([1,10,1150], dtype=np.int)
+
+    with open('words.json') as data_file:
+        wordsdata = json.load(data_file)
+
+    words = message.split()
+    for l in xrange(min(10,len(words))):
+        if words[l] in wordsdata:
+            wordarray[1][l][wordsdata[words[l]]] = 1
+
+    preds = sess.run([model.prediction], {data: wordarray, dropout: 1})[0][0]
+    # return preds.tolist()
+    return "test"
+
+run(host='localhost', port=8080)

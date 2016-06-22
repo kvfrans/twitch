@@ -178,19 +178,24 @@ arr = np.zeros([28310,10,1150])
 labels = np.zeros([28310,161])
 for i in xrange(161):
     for k in data[emojis[i]]:
-        labelvec = np.zeros([161])
-        labelvec[i] = 1
-        labels[count] = labelvec
+
         # labels[count,:] = i
         # labels[count] = labelvec
         wordarray = np.zeros([10,1150], dtype=np.int)
         words = k.split()
+        hadwords = False
         for l in xrange(min(10,len(words))):
             if words[l] in wordsdata:
                 wordarray[l][wordsdata[words[l]]] = 1
+                hadwords = True
         # print np.shape(word2d)
-        arr[count] = wordarray
-        count += 1
+
+        if hadwords:
+            arr[count] = wordarray
+            labelvec = np.zeros([161])
+            labelvec[i] = 1
+            labels[count] = labelvec
+            count += 1
 
 print count
 
