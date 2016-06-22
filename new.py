@@ -146,7 +146,7 @@ def classify():
         if words[l] in wordsdata:
             wordarray[:][l][wordsdata[words[l]]] = 1
 
-    preds = sess.run([model.prediction, model.error], {data: wordarray, dropout: 1})
+    preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     print np.shape(preds)
     emojipreds = np.argmax(preds,axis=1)
