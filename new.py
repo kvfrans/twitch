@@ -145,11 +145,12 @@ def classify():
     for l in xrange(min(10,len(words))):
         word = words[l].lower()
         if word in wordsdata:
-            # print wordsdata[word]
+            print word
             wordarray[:,l,wordsdata[word]] = 1
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     # print np.shape(preds)
+    np.set_printoptions(threshold=numpy.nan)
     emojipreds = np.argmax(preds,axis=1)[0]
     print emojipreds
     print preds
