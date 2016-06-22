@@ -169,30 +169,29 @@ var getNthWord = function(string, n){
 }
 
 var json = require('./data.json');
-
 for(var i = 0; i < emojis.length; i++) {
-    var body = json[emojis[i]].toString()
-    var word_count = body.split(/\s+/).length
+    var body = json[emojis[i]].toString().toLowerCase().replace(/,/g , "").split(" ")
+    var word_count = body.length
+    // console.log("word count = " + word_count);
     // console.log("second word is " + getNthWord(body, 1));
     // console.log("second word is second".split("second").length-1);
-    for(var i = 0; i < word_count; i++) {
-        word = getNthWord(body, i).split(",").join("")
-        if(word.length >= 3)
-        {
-            if(topwords[word] == null) { //not in the dict yet
-                var occurences = body.split(word).length;
-                topwords[word] = occurences;
+    for(var j = 0; j < word_count; j++) {
+        word = body[j]
+        if(word.length >= 3) {
+            if(topwords[word] == null) {
+                topwords[word] = 1;
             }
             else {
-                var occurences = body.split(word).length;
-                // console.log("NotLikeThis" + topwords[word]);
-                topwords[word] = topwords[word] + occurences;
+                topwords[word] = topwords[word] + 1;
+                console.log(topwords[word]);
             }
         }
     }
 }
+console.log("---")
 console.log(Object.keys(topwords).length);
 console.log(Object.keys(topwords)[0]);
+
 for(var i = 0; i < Object.keys(topwords).length; i++) {
     if(topwords[Object.keys(topwords)[i]] <= 3) {
         delete topwords[Object.keys(topwords)[i]]
@@ -204,12 +203,11 @@ for(var i = 0; i < Object.keys(topwords).length; i++) {
     }
     else
     {
-        console.log(Object.keys(topwords)[i])
+        // console.log("what " +Object.keys(topwords)[i])
     }
 }
 
 console.log("---")
-console.log("1".length)
 console.log(Object.keys(topwords)[0].length)
 console.log(Object.keys(topwords).length);
 for(var i = 0; i < Object.keys(topwords).length; i++) {
@@ -228,6 +226,6 @@ for(var i = 0; i < emojis.length; i++) {
     total += length
     percent += percentage
 }
-console.log(percentages);
+// console.log(percentages);
 console.log(total);
 console.log(percent);
