@@ -12,7 +12,28 @@ var options = {
         username: "TacoExplosion",
         password: "oauth:l0utik6fryye3pcus4gpo6uje5ba7f"
     },
-    channels: ["#tsm_bjergsen","tsm_dyrus","flosd","trick2g","valkrin","sjow", "hotform", "nl_kripp", "scarra", "wingsofdeath", "tsm_theoddone", "trumpsc", "nvidia"]
+    channels: ["#tsm_bjergsen",
+    "tsm_dyrus",
+    "flosd",
+    "trick2g",
+    "valkrin",
+    "sjow",
+    "hotform",
+    "nl_kripp",
+    "scarra",
+    "wingsofdeath",
+    "tsm_theoddone",
+    "trumpsc",
+    "nvidia",
+    "c9sneaky",
+    "itshafu",
+    "frodan",
+    "firebat",
+    "iwilldominate",
+    "meteos",
+    "anniebot",
+    "imaqtpie",
+    "aphromoo"]
 };
 
 
@@ -220,7 +241,11 @@ client.on("chat", function (channel, userstate, message, self) {
             // console.log("lastemote is " + lastemote);
             data[lastemote].push(message);
             // console.log(data);
-            console.log(counter);
+            time = new Date().toLocaleTimeString('en-US', { hour12: false,
+                                             hour: "numeric",
+                                             minute: "numeric",
+                                             second:"numeric"});
+            console.log(time + " " + counter);
             if(counter % 50 == 0)
             {
                 jsonfile.writeFile(file, data, function (err) {
