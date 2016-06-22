@@ -118,9 +118,10 @@ if istrain:
 def index():
     return "same"
 
-@post('/classify') # or @route('/login', method='POST')
+@get('/classify') # or @route('/login', method='POST')
 def classify():
-    message = request.forms.get('message')
+    # message = request.forms.get('message')
+    message = "pride"
     wordarray = np.zeros([1,10,1150], dtype=np.int)
 
     with open('words.json') as data_file:
