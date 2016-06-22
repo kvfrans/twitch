@@ -182,7 +182,7 @@ var client = new tmi.client(options);
 // Connect the client to the server..
 client.connect();
 
-
+// var data  = {}
 var data = require('./data.json');
 
 // for(var i = 0; i < emojis.length; i++)
