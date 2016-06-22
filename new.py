@@ -95,9 +95,12 @@ saver = tf.train.Saver()
 
 istrain = False
 
+train_data = np.load("data.npy")
+train_labels = np.load("labels.npy")
+
 if istrain:
-    train_data = np.load("data.npy")
-    train_labels = np.load("labels.npy")
+    # train_data = np.load("data.npy")
+    # train_labels = np.load("labels.npy")
     print np.shape(train_data)
     for epoch in range(1000):
         for i in range(440):
@@ -112,7 +115,18 @@ if istrain:
                 print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
 
         saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
+else:
+    saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
+    rand = 300
+    x = train_data[rand:rand+64,:,:]
+    y = train_labels[rand:rand+64,:]
+    preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
 
+    print np.shape(y)
+    print np.shape(preds)
+
+    print np.argmax(y,axis=1)
+    print np.argmax(preds,axis=1)
 
 @route('/')
 def index():
@@ -121,19 +135,34 @@ def index():
 @get('/classify') # or @route('/login', method='POST')
 def classify():
     # message = request.forms.get('message')
-    message = "pride"
-    wordarray = np.zeros([1,10,1150], dtype=np.int)
+    message = "Alright, rogue, I guess"
+    wordarray = np.zeros([64,10,1150], dtype=np.int)
 
     with open('words.json') as data_file:
         wordsdata = json.load(data_file)
 
-    words = message.split()
-    for l in xrange(min(10,len(words))):
-        if words[l] in wordsdata:
-            wordarray[1][l][wordsdata[words[l]]] = 1
+    # words = message.split()
+    # for l in xrange(min(10,len(words))):
+    #     if words[l] in wordsdata:
+    #         wordarray[:][l][wordsdata[words[l]]] = 1
 
-    preds = sess.run([model.prediction], {data: wordarray, dropout: 1})[0][0]
-    # return preds.tolist()
+    rand = 300
+    wordarray = train_data[rand:rand+64,:,:]
+    y = train_labels[rand:rand+64,:]
+    print np.shape(y)
+
+    preds, err = sess.run([model.prediction, model.error], {data: wordarray, target: y, dropout: 1})
+    preds = preds[0]
+    print np.shape(preds)
+    print err * 100
+    print np.shape(y)
+    emojipreds = np.argmax(preds,axis=1)
+    reals = np.argmax(y, axis=1)
+    print emojipreds
+    print reals
+    # json_string = json.dumps(preds.tolist())
+    # return json_string + "<br>" + str(np.argmax(preds))
+    # return
     return "test"
 
 run(host='localhost', port=8080)
