@@ -93,7 +93,7 @@ sess.run(tf.initialize_all_variables())
 
 saver = tf.train.Saver()
 
-istrain = True
+istrain = False
 
 train_data = np.load("data.npy")
 train_labels = np.load("labels.npy")
@@ -121,6 +121,9 @@ else:
     x = train_data[rand:rand+64,:,:]
     y = train_labels[rand:rand+64,:]
     preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
+
+    print np.argmax(x[0],axis=1)
+    print np.argmax(y[0],axis=0)
 
     print np.shape(y)
     print np.shape(preds)
