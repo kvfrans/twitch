@@ -198,11 +198,18 @@ for i in xrange(161):
             count += 1
 
 print count
+realarr = arr[:count]
+print np.shape(arr)
+print np.shape(realarr)
 
+
+reallabels = labels[:count]
+print np.shape(labels)
+print np.shape(reallabels)
 # print labels[800]
-print arr[0]
+print realarr[0]
 
-np.random.shuffle(arr)
+np.random.shuffle(realarr)
 np.random.shuffle(labels)
-np.save("data.npy", arr)
+np.save("data.npy", realarr)
 np.save("labels.npy", labels)
