@@ -39,9 +39,9 @@ class SequenceClassification:
     @lazy_property
     def prediction(self):
 
-        embeds = tf.Variable(tf.truncated_normal([2312, self._num_hidden], stddev=0.01))
+        embeds = tf.Variable(tf.truncated_normal([2035, self._num_hidden], stddev=0.01))
         # embedding = tf.batch_matmul(data, embeds)
-        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,2312]),embeds,a_is_sparse=True),[-1,10,200])
+        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,2035]),embeds,a_is_sparse=True),[-1,10,200])
 
         # Recurrent network.
         network = tf.nn.rnn_cell.LSTMCell(self._num_hidden)
@@ -83,7 +83,7 @@ class SequenceClassification:
 
 
 num_classes = 161
-data = tf.placeholder(tf.float32, [None, 10, 2312])
+data = tf.placeholder(tf.float32, [None, 10, 2035])
 target = tf.placeholder(tf.float32, [None, 161])
 dropout = tf.placeholder(tf.float32)
 
@@ -103,7 +103,7 @@ if istrain:
     # train_labels = np.load("labels.npy")
     print np.shape(train_data)
     for epoch in range(1000):
-        for i in range(142):
+        for i in range(354):
             rand = i
             # rand = randint(0,6100)
             x = train_data[rand:rand+64,:,:]
@@ -122,6 +122,9 @@ else:
     y = train_labels[rand:rand+64,:]
     preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
 
+    print np.argmax(x[0],axis=1)
+    print np.argmax(y[0],axis=0)
+
     print np.shape(y)
     print np.shape(preds)
 
@@ -135,7 +138,7 @@ def index():
 @post('/classify') # or @route('/login', method='POST')
 def classify():
     message = request.forms.get('message')
-    wordarray = np.zeros([64,10,2312], dtype=np.int)
+    wordarray = np.zeros([64,10,2035], dtype=np.int)
 
     with open('words.json') as data_file:
         wordsdata = json.load(data_file)
@@ -143,15 +146,18 @@ def classify():
     words = message.split()
     print words
     for l in xrange(min(10,len(words))):
-        if words[l] in wordsdata:
-            print wordsdata[words[l]]
-            wordarray[:][l][wordsdata[words[l]]] = 1
-
+        word = words[l].lower()
+        if word in wordsdata:
+            print word
+            wordarray[:,l,wordsdata[word]] = 1
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
-    print np.shape(preds)
+    # print np.shape(preds)
+    np.set_printoptions(threshold=np.nan)
     emojipreds = np.argmax(preds,axis=1)[0]
     print emojipreds
+    for i in xrange(161):
+        print str(i) + ": " + str(int(round(preds[0][i]*100)))
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
     # return

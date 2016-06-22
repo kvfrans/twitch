@@ -174,14 +174,14 @@ a = np.arange(dict_length)
 print a
 
 count = 0
-arr = np.zeros([28310,10,2312])
+arr = np.zeros([28310,10,2035])
 labels = np.zeros([28310,161])
 for i in xrange(161):
     for k in data[emojis[i]]:
 
         # labels[count,:] = i
         # labels[count] = labelvec
-        wordarray = np.zeros([10,2312], dtype=np.int)
+        wordarray = np.zeros([10,2035], dtype=np.int)
         words = k.split()
         hadwords = False
         for l in xrange(min(10,len(words))):
@@ -203,14 +203,33 @@ realarr = arr[:count]
 print np.shape(arr)
 print np.shape(realarr)
 
+np.set_printoptions(threshold=np.nan)
+
 
 reallabels = labels[:count]
 print np.shape(labels)
 print np.shape(reallabels)
 # print labels[800]
-print realarr[0]
+print np.argmax(realarr[5000][0])
+print np.argmax(reallabels[5000])
 
+indextest = np.arange(count)
+
+rng_state = np.random.get_state()
 np.random.shuffle(realarr)
+np.random.set_state(rng_state)
 np.random.shuffle(reallabels)
+np.random.set_state(rng_state)
+np.random.shuffle(indextest)
+
+shuffledindex = 0
+
+for i in xrange(count):
+    if indextest[i] == 5000:
+        shuffledindex = i
+
+print np.argmax(realarr[shuffledindex][0])
+print np.argmax(reallabels[shuffledindex])
+
 np.save("data.npy", realarr)
 np.save("labels.npy", reallabels)

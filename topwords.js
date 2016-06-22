@@ -198,7 +198,7 @@ for(var i = 0; i < wordlength; i++) {
     if(topwords[wordlist[i]] <= 5) {
         delete topwords[wordlist[i]]
     }
-    else if(wordlist[i].length < 2)
+    else if(wordlist[i].length <= 2)
     {
         // console.log(Object.keys(topwords)[i])
         delete topwords[wordlist[i]]
