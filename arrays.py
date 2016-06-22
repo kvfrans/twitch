@@ -203,18 +203,33 @@ realarr = arr[:count]
 print np.shape(arr)
 print np.shape(realarr)
 
+np.set_printoptions(threshold=np.nan)
+
 
 reallabels = labels[:count]
 print np.shape(labels)
 print np.shape(reallabels)
 # print labels[800]
-print realarr[0]
+print np.argmax(realarr[5000][0])
+print np.argmax(reallabels[5000])
 
+indextest = np.arange(count)
 
 rng_state = np.random.get_state()
 np.random.shuffle(realarr)
 np.random.set_state(rng_state)
 np.random.shuffle(reallabels)
+np.random.set_state(rng_state)
+np.random.shuffle(indextest)
 
-np.save("data.npy", realarr)
-np.save("labels.npy", reallabels)
+shuffledindex = 0
+
+for i in xrange(count):
+    if indextest[i] == 5000:
+        shuffledindex = i
+
+print np.argmax(realarr[shuffledindex][0])
+print np.argmax(reallabels[shuffledindex])
+
+# np.save("data.npy", realarr)
+# np.save("labels.npy", reallabels)
