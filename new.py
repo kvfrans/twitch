@@ -39,9 +39,9 @@ class SequenceClassification:
     @lazy_property
     def prediction(self):
 
-        embeds = tf.Variable(tf.truncated_normal([1150, self._num_hidden], stddev=0.01))
+        embeds = tf.Variable(tf.truncated_normal([2312, self._num_hidden], stddev=0.01))
         # embedding = tf.batch_matmul(data, embeds)
-        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,1150]),embeds,a_is_sparse=True),[-1,10,200])
+        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,2312]),embeds,a_is_sparse=True),[-1,10,200])
 
         # Recurrent network.
         network = tf.nn.rnn_cell.LSTMCell(self._num_hidden)
@@ -83,7 +83,7 @@ class SequenceClassification:
 
 
 num_classes = 161
-data = tf.placeholder(tf.float32, [None, 10, 1150])
+data = tf.placeholder(tf.float32, [None, 10, 2312])
 target = tf.placeholder(tf.float32, [None, 161])
 dropout = tf.placeholder(tf.float32)
 
@@ -93,7 +93,7 @@ sess.run(tf.initialize_all_variables())
 
 saver = tf.train.Saver()
 
-istrain = False
+istrain = True
 
 train_data = np.load("data.npy")
 train_labels = np.load("labels.npy")
@@ -103,7 +103,7 @@ if istrain:
     # train_labels = np.load("labels.npy")
     print np.shape(train_data)
     for epoch in range(1000):
-        for i in range(440):
+        for i in range(142):
             rand = i
             # rand = randint(0,6100)
             x = train_data[rand:rand+64,:,:]
@@ -136,7 +136,7 @@ def index():
 def classify():
     # message = request.forms.get('message')
     message = "Alright, rogue, I guess"
-    wordarray = np.zeros([64,10,1150], dtype=np.int)
+    wordarray = np.zeros([64,10,2312], dtype=np.int)
 
     with open('words.json') as data_file:
         wordsdata = json.load(data_file)
