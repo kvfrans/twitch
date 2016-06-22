@@ -63,7 +63,7 @@ class SequenceClassification:
 
     @lazy_property
     def optimize(self):
-        learning_rate = 0.003
+        learning_rate = 0.0003
         optimizer = tf.train.RMSPropOptimizer(learning_rate)
         return optimizer.minimize(self.cost)
 
@@ -108,4 +108,5 @@ if __name__ == '__main__':
                 error, co = sess.run([model.error, model.cost], {data: x, target: y, dropout: 1})
                 print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
 
-        saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
+        if epoch % 5 == 0:
+            saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
