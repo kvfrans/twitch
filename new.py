@@ -132,10 +132,9 @@ else:
 def index():
     return "same"
 
-@get('/classify') # or @route('/login', method='POST')
+@post('/classify') # or @route('/login', method='POST')
 def classify():
-    # message = request.forms.get('message')
-    message = "just here for advice"
+    message = request.forms.get('message')
     wordarray = np.zeros([64,10,2312], dtype=np.int)
 
     with open('words.json') as data_file:
@@ -149,7 +148,7 @@ def classify():
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     print np.shape(preds)
-    emojipreds = np.argmax(preds,axis=1)
+    emojipreds = np.argmax(preds,axis=1)[0]
     print emojipreds
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
