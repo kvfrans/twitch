@@ -65,7 +65,7 @@ class SequenceClassification:
 
     @lazy_property
     def optimize(self):
-        learning_rate = 0.003
+        learning_rate = 0.0003
         optimizer = tf.train.RMSPropOptimizer(learning_rate)
         return optimizer.minimize(self.cost)
 
