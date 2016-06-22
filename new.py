@@ -158,9 +158,10 @@ def classify():
     # print np.shape(preds)
     np.set_printoptions(threshold=np.nan)
     emojipreds = np.argmax(preds,axis=1)[0]
+    print "prediction:"
     print emojipreds
-    for i in xrange(161):
-        print str(i) + ": " + str(int(round(preds[0][i]*100)))
+    # for i in xrange(161):
+        # print str(i) + ": " + str(int(round(preds[0][i]*100)))
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
     # return
