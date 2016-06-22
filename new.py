@@ -93,7 +93,7 @@ sess.run(tf.initialize_all_variables())
 
 saver = tf.train.Saver()
 
-istrain = True
+istrain = False
 
 train_data = np.load("data.npy")
 train_labels = np.load("labels.npy")
