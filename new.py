@@ -135,31 +135,22 @@ def index():
 @get('/classify') # or @route('/login', method='POST')
 def classify():
     # message = request.forms.get('message')
-    message = "Alright, rogue, I guess"
+    message = "just here for advice"
     wordarray = np.zeros([64,10,2312], dtype=np.int)
 
     with open('words.json') as data_file:
         wordsdata = json.load(data_file)
 
-    # words = message.split()
-    # for l in xrange(min(10,len(words))):
-    #     if words[l] in wordsdata:
-    #         wordarray[:][l][wordsdata[words[l]]] = 1
+    words = message.split()
+    for l in xrange(min(10,len(words))):
+        if words[l] in wordsdata:
+            wordarray[:][l][wordsdata[words[l]]] = 1
 
-    rand = 300
-    wordarray = train_data[rand:rand+64,:,:]
-    y = train_labels[rand:rand+64,:]
-    print np.shape(y)
-
-    preds, err = sess.run([model.prediction, model.error], {data: wordarray, target: y, dropout: 1})
+    preds = sess.run([model.prediction, model.error], {data: wordarray, dropout: 1})
     preds = preds[0]
     print np.shape(preds)
-    print err * 100
-    print np.shape(y)
     emojipreds = np.argmax(preds,axis=1)
-    reals = np.argmax(y, axis=1)
     print emojipreds
-    print reals
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
     # return
