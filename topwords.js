@@ -191,15 +191,17 @@ for(var i = 0; i < emojis.length; i++) {
 console.log("---")
 console.log(Object.keys(topwords).length);
 console.log(Object.keys(topwords)[0]);
+var wordlist = Object.keys(topwords);
+var wordlength = wordlist.length
 
-for(var i = 0; i < Object.keys(topwords).length; i++) {
-    if(topwords[Object.keys(topwords)[i]] <= 3) {
-        delete topwords[Object.keys(topwords)[i]]
+for(var i = 0; i < wordlength; i++) {
+    if(topwords[wordlist[i]] <= 2) {
+        delete topwords[wordlist[i]]
     }
-    else if(Object.keys(topwords)[i].length < 3)
+    else if(wordlist[i].length < 5)
     {
         // console.log(Object.keys(topwords)[i])
-        delete topwords[Object.keys(topwords)[i]]
+        delete topwords[wordlist[i]]
     }
     else
     {
