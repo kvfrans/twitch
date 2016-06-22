@@ -150,7 +150,7 @@ def classify():
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     # print np.shape(preds)
-    np.set_printoptions(threshold=numpy.nan)
+    np.set_printoptions(threshold=np.nan)
     emojipreds = np.argmax(preds,axis=1)[0]
     print emojipreds
     print preds
