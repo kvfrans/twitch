@@ -174,14 +174,14 @@ a = np.arange(dict_length)
 print a
 
 count = 0
-arr = np.zeros([28310,10,2312])
+arr = np.zeros([28310,10,2035])
 labels = np.zeros([28310,161])
 for i in xrange(161):
     for k in data[emojis[i]]:
 
         # labels[count,:] = i
         # labels[count] = labelvec
-        wordarray = np.zeros([10,2312], dtype=np.int)
+        wordarray = np.zeros([10,2035], dtype=np.int)
         words = k.split()
         hadwords = False
         for l in xrange(min(10,len(words))):
