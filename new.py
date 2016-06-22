@@ -132,7 +132,7 @@ else:
         print inwords
         ss = ""
         for k in inwordslist:
-            for key, item in wordsdata:
+            for key, item in wordsdata.iteritems():
                 if item == k:
                     ss = ss + " " + key
         print ss
