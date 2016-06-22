@@ -95,17 +95,28 @@ if __name__ == '__main__':
 
     saver = tf.train.Saver()
 
-    print np.shape(train_data)
-    for epoch in range(1000):
-        for i in range(440):
-            rand = i
-            # rand = randint(0,6100)
-            x = train_data[rand:rand+64,:,:]
-            y = train_labels[rand:rand+64,:]
-            sess.run(model.optimize, {data: x, target: y, dropout: 0.5})
-            # print i
-            if i % 50 == 0:
-                error, co = sess.run([model.error, model.cost], {data: x, target: y, dropout: 1})
-                print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
+    istrain = True
 
-        saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
+    print np.shape(train_data)
+    if istrain:
+        for epoch in range(1000):
+            for i in range(440):
+                rand = i
+                # rand = randint(0,6100)
+                x = train_data[rand:rand+64,:,:]
+                y = train_labels[rand:rand+64,:]
+                sess.run(model.optimize, {data: x, target: y, dropout: 0.5})
+                # print i
+                if i % 50 == 0:
+                    error, co = sess.run([model.error, model.cost], {data: x, target: y, dropout: 1})
+                    print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
+
+            saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
+    else:
+        saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
+        rand = 300
+        x = train_data[rand:rand+64,:,:]
+        y = train_labels[rand:rand+64,:]
+        preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})
+        print np.argmax(y,axis=1)
+        print np.argmax(preds,axis=1)
