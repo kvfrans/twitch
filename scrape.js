@@ -183,12 +183,12 @@ var client = new tmi.client(options);
 client.connect();
 
 
-var data = {};
+var data = require('./data.json');
 
-for(var i = 0; i < emojis.length; i++)
-{
-    data[emojis[i]] = [];
-}
+// for(var i = 0; i < emojis.length; i++)
+// {
+//     data[emojis[i]] = [];
+// }
 
 var counter = 0;
 
