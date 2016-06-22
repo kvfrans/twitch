@@ -146,8 +146,7 @@ def classify():
         word = words[l].lower()
         if word in wordsdata:
             print wordsdata[word]
-            wordarray[:][l][wordsdata[word]] = 1
-
+            wordarray[:,l,wordsdata[word]] = 1
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     print np.shape(preds)
