@@ -122,8 +122,10 @@ else:
     y = train_labels[rand:rand+64,:]
     preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
 
-    print np.argmax(x[0],axis=1)
-    print np.argmax(y[0],axis=0)
+    print "checking alignment"
+    for i in xrange(20):
+        print np.argmax(x[i],axis=1)
+        print np.argmax(y[i],axis=0)
 
     print np.shape(y)
     print np.shape(preds)
@@ -149,15 +151,17 @@ def classify():
         word = words[l].lower()
         if word in wordsdata:
             print word
+            print wordsdata[word]
             wordarray[:,l,wordsdata[word]] = 1
     preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     # print np.shape(preds)
     np.set_printoptions(threshold=np.nan)
     emojipreds = np.argmax(preds,axis=1)[0]
+    print "prediction:"
     print emojipreds
-    for i in xrange(161):
-        print str(i) + ": " + str(int(round(preds[0][i]*100)))
+    # for i in xrange(161):
+        # print str(i) + ": " + str(int(round(preds[0][i]*100)))
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
     # return
