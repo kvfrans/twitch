@@ -192,6 +192,8 @@ for i in xrange(161):
         arr[count] = wordarray
         count += 1
 
+print count
+
 # print labels[800]
 print arr[0]
 
