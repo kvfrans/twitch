@@ -39,9 +39,9 @@ class SequenceClassification:
     @lazy_property
     def prediction(self):
 
-        embeds = tf.Variable(tf.truncated_normal([1150, self._num_hidden], stddev=0.01))
+        embeds = tf.Variable(tf.truncated_normal([2312, self._num_hidden], stddev=0.01))
         # embedding = tf.batch_matmul(data, embeds)
-        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,1150]),embeds,a_is_sparse=True),[-1,10,200])
+        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,2312]),embeds,a_is_sparse=True),[-1,10,200])
 
         # Recurrent network.
         network = tf.nn.rnn_cell.LSTMCell(self._num_hidden)
@@ -83,7 +83,7 @@ class SequenceClassification:
 
 
 num_classes = 161
-data = tf.placeholder(tf.float32, [None, 10, 1150])
+data = tf.placeholder(tf.float32, [None, 10, 2312])
 target = tf.placeholder(tf.float32, [None, 161])
 dropout = tf.placeholder(tf.float32)
 
@@ -103,7 +103,7 @@ if istrain:
     # train_labels = np.load("labels.npy")
     print np.shape(train_data)
     for epoch in range(1000):
-        for i in range(440):
+        for i in range(142):
             rand = i
             # rand = randint(0,6100)
             x = train_data[rand:rand+64,:,:]
@@ -117,7 +117,7 @@ if istrain:
         saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
 else:
     saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
-    rand = 400
+    rand = 50
     x = train_data[rand:rand+64,:,:]
     y = train_labels[rand:rand+64,:]
     preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
@@ -132,34 +132,26 @@ else:
 def index():
     return "same"
 
-@get('/classify') # or @route('/login', method='POST')
+@post('/classify') # or @route('/login', method='POST')
 def classify():
-    # message = request.forms.get('message')
-    message = "Alright, rogue, I guess"
-    wordarray = np.zeros([64,10,1150], dtype=np.int)
+    message = request.forms.get('message')
+    wordarray = np.zeros([64,10,2312], dtype=np.int)
 
     with open('words.json') as data_file:
         wordsdata = json.load(data_file)
 
-    # words = message.split()
-    # for l in xrange(min(10,len(words))):
-    #     if words[l] in wordsdata:
-    #         wordarray[:][l][wordsdata[words[l]]] = 1
+    words = message.split()
+    print words
+    for l in xrange(min(10,len(words))):
+        if words[l] in wordsdata:
+            print wordsdata[words[l]]
+            wordarray[:][l][wordsdata[words[l]]] = 1
 
-    rand = 300
-    wordarray = train_data[rand:rand+64,:,:]
-    y = train_labels[rand:rand+64,:]
-    print np.shape(y)
-
-    preds, err = sess.run([model.prediction, model.error], {data: wordarray, target: y, dropout: 1})
+    preds = sess.run([model.prediction], {data: wordarray, dropout: 1})
     preds = preds[0]
     print np.shape(preds)
-    print err * 100
-    print np.shape(y)
-    emojipreds = np.argmax(preds,axis=1)
-    reals = np.argmax(y, axis=1)
+    emojipreds = np.argmax(preds,axis=1)[0]
     print emojipreds
-    print reals
     # json_string = json.dumps(preds.tolist())
     # return json_string + "<br>" + str(np.argmax(preds))
     # return
