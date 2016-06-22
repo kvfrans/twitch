@@ -85,7 +85,7 @@ if __name__ == '__main__':
     train_data = np.load("data.npy")
     train_labels = np.load("labels.npy")
     num_classes = 161
-    data = tf.placeholder(tf.float32, [None, 10, 478])
+    data = tf.placeholder(tf.float32, [None, 10, 1150])
     target = tf.placeholder(tf.float32, [None, 161])
     dropout = tf.placeholder(tf.float32)
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
     print np.shape(train_data)
     for epoch in range(1000):
-        for i in range(95):
+        for i in range(440):
             rand = i
             # rand = randint(0,6100)
             x = train_data[rand:rand+64,:,:]
