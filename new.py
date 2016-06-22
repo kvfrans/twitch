@@ -135,6 +135,7 @@ else:
             for key, item in wordsdata:
                 if item == k
                     ss = ss + " " + key
+        print ss
 
 
         print np.argmax(y[i],axis=0)
