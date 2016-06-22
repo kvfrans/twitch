@@ -141,6 +141,7 @@ def classify():
         wordsdata = json.load(data_file)
 
     words = message.split()
+    print words
     for l in xrange(min(10,len(words))):
         if words[l] in wordsdata:
             print wordsdata[words[l]]
