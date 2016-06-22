@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     saver = tf.train.Saver()
 
-    istrain = True
+    istrain = False
 
     print np.shape(train_data)
     if istrain:
