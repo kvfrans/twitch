@@ -117,7 +117,7 @@ if istrain:
         saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)
 else:
     saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
-    rand = 400
+    rand = 50
     x = train_data[rand:rand+64,:,:]
     y = train_labels[rand:rand+64,:]
     preds = sess.run([model.prediction], {data: x, target: y, dropout: 1})[0]
