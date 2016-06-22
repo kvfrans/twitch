@@ -195,10 +195,10 @@ var wordlist = Object.keys(topwords);
 var wordlength = wordlist.length
 
 for(var i = 0; i < wordlength; i++) {
-    if(topwords[wordlist[i]] <= 2) {
+    if(topwords[wordlist[i]] <= 5) {
         delete topwords[wordlist[i]]
     }
-    else if(wordlist[i].length < 5)
+    else if(wordlist[i].length < 2)
     {
         // console.log(Object.keys(topwords)[i])
         delete topwords[wordlist[i]]
@@ -208,6 +208,7 @@ for(var i = 0; i < wordlength; i++) {
         // console.log("what " +Object.keys(topwords)[i])
     }
 }
+
 console.log("---")
 console.log(Object.keys(topwords)[0].length)
 console.log(Object.keys(topwords).length);

@@ -185,8 +185,9 @@ for i in xrange(161):
         words = k.split()
         hadwords = False
         for l in xrange(min(10,len(words))):
-            if words[l] in wordsdata:
-                wordarray[l][wordsdata[words[l]]] = 1
+            word = words[l].lower()
+            if word in wordsdata:
+                wordarray[l][wordsdata[word]] = 1
                 hadwords = True
         # print np.shape(word2d)
 
