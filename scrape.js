@@ -12,7 +12,7 @@ var options = {
         username: "TacoExplosion",
         password: "oauth:l0utik6fryye3pcus4gpo6uje5ba7f"
     },
-    channels: ["#imaqtpie","ELEAGUE TV","Kolento","WagamamaTV","EULCS1","ODPixel","LIRIK"]
+    channels: ["#tsm_bjergsen","tsm_dyrus","flosd","trick2g","valkrin","sjow", "hotform", "nl_kripp", "scarra", "wingsofdeath", "tsm_theoddone", "trumpsc", "nvidia"]
 };
 
 
@@ -224,7 +224,7 @@ client.on("chat", function (channel, userstate, message, self) {
             if(counter % 50 == 0)
             {
                 jsonfile.writeFile(file, data, function (err) {
-                  console.error(err)
+                  // console.error(err)
                 })
             }
             counter++;
