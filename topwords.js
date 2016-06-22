@@ -169,6 +169,7 @@ var getNthWord = function(string, n){
 }
 
 var json = require('./data.json');
+
 for(var i = 0; i < emojis.length; i++) {
     var body = json[emojis[i]].toString()
     var word_count = body.split(/\s+/).length
@@ -210,10 +211,23 @@ for(var i = 0; i < Object.keys(topwords).length; i++) {
 console.log("---")
 console.log("1".length)
 console.log(Object.keys(topwords)[0].length)
-// console.log(Object.keys(topwords).length);
-// for(var i = 0; i < Object.keys(topwords).length; i++) {
-//   topwords[Object.keys(topwords)[i]] = i
-// }
+console.log(Object.keys(topwords).length);
+for(var i = 0; i < Object.keys(topwords).length; i++) {
+    topwords[Object.keys(topwords)[i]] = i
+}
 jsonfile.writeFile(file, topwords, function (err) {
   // console.error(err)
 })
+percentages = {}
+total = 0
+percent = 0
+for(var i = 0; i < emojis.length; i++) {
+    length = json[emojis[i]].length;
+    percentage = (length / 28310.0) * 100
+    percentages[emojis[i]] =  percentage
+    total += length
+    percent += percentage
+}
+console.log(percentages);
+console.log(total);
+console.log(percent);
