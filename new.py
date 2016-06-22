@@ -5,6 +5,7 @@ import sets
 import tensorflow as tf
 from random import randint
 import numpy as np
+import os
 # from tensorflow.models.rnn import rnn_cell
 # from tensorflow.models.rnn import rnn
 
@@ -36,9 +37,9 @@ class SequenceClassification:
     @lazy_property
     def prediction(self):
 
-        embeds = tf.Variable(tf.truncated_normal([574, self._num_hidden], stddev=0.01))
+        embeds = tf.Variable(tf.truncated_normal([478, self._num_hidden], stddev=0.01))
         # embedding = tf.batch_matmul(data, embeds)
-        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,574]),embeds,a_is_sparse=True),[-1,10,200])
+        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,478]),embeds,a_is_sparse=True),[-1,10,200])
 
         # Recurrent network.
         network = tf.nn.rnn_cell.LSTMCell(self._num_hidden)
@@ -84,16 +85,21 @@ if __name__ == '__main__':
     train_data = np.load("data.npy")
     train_labels = np.load("labels.npy")
     num_classes = 161
-    data = tf.placeholder(tf.float32, [None, 10, 574])
+    data = tf.placeholder(tf.float32, [None, 10, 478])
     target = tf.placeholder(tf.float32, [None, 161])
     dropout = tf.placeholder(tf.float32)
 
     model = SequenceClassification(data, target, dropout)
     sess = tf.Session()
     sess.run(tf.initialize_all_variables())
+
+    saver = tf.train.Saver()
+
+    print np.shape(train_data)
     for epoch in range(1000):
-        for i in range(100):
-            rand = randint(0,12000)
+        for i in range(95):
+            rand = i
+            # rand = randint(0,6100)
             x = train_data[rand:rand+64,:,:]
             y = train_labels[rand:rand+64,:]
             sess.run(model.optimize, {data: x, target: y, dropout: 0.5})
@@ -101,3 +107,5 @@ if __name__ == '__main__':
             if i % 50 == 0:
                 error, co = sess.run([model.error, model.cost], {data: x, target: y, dropout: 1})
                 print('Epoch {:2d} error {:3.1f}%  cost {:3.1f}'.format(epoch + 1, 100 * error, co))
+
+        saver.save(sess, os.getcwd()+"/training/train",global_step=epoch)

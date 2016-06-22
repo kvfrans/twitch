@@ -174,8 +174,8 @@ a = np.arange(dict_length)
 print a
 
 count = 0
-arr = np.zeros([12201,10,478])
-labels = np.zeros([12201,161])
+arr = np.zeros([6253,10,478])
+labels = np.zeros([6253,161])
 for i in xrange(161):
     for k in data[emojis[i]]:
         labelvec = np.zeros([161])
