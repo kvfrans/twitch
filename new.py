@@ -98,6 +98,9 @@ istrain = False
 train_data = np.load("data.npy")
 train_labels = np.load("labels.npy")
 
+with open('words.json') as data_file:
+    wordsdata = json.load(data_file)
+
 if istrain:
     # train_data = np.load("data.npy")
     # train_labels = np.load("labels.npy")
@@ -124,7 +127,16 @@ else:
 
     print "checking alignment"
     for i in xrange(20):
-        print np.argmax(x[i],axis=1)
+        inwords = np.argmax(x[i],axis=1)
+        inwordlist = inwords.tolist()
+        print inwords
+        ss = ""
+        for k in inwordslist:
+            for key, item in wordsdata:
+                if item == k
+                    ss = ss + " " + key
+
+
         print np.argmax(y[i],axis=0)
 
     print np.shape(y)
@@ -142,8 +154,7 @@ def classify():
     message = request.forms.get('message')
     wordarray = np.zeros([64,10,2035], dtype=np.int)
 
-    with open('words.json') as data_file:
-        wordsdata = json.load(data_file)
+
 
     words = message.split()
     print words
