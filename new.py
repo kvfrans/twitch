@@ -37,9 +37,9 @@ class SequenceClassification:
     @lazy_property
     def prediction(self):
 
-        embeds = tf.Variable(tf.truncated_normal([478, self._num_hidden], stddev=0.01))
+        embeds = tf.Variable(tf.truncated_normal([1150, self._num_hidden], stddev=0.01))
         # embedding = tf.batch_matmul(data, embeds)
-        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,478]),embeds,a_is_sparse=True),[-1,10,200])
+        embedding = tf.reshape(tf.matmul(tf.reshape(data,[-1,1150]),embeds,a_is_sparse=True),[-1,10,200])
 
         # Recurrent network.
         network = tf.nn.rnn_cell.LSTMCell(self._num_hidden)
