@@ -177,7 +177,7 @@ var emojis = ["4Head",
 
 function search(ele) {
     if(event.keyCode == 13) {
-        $.post("https://znvbhsmvad.localtunnel.me/classify", {message: ele.value}, function(data, status){
+        $.post("https://pjtsimfxoy.localtunnel.me/classify", {message: ele.value}, function(data, status){
             var num = parseInt(data)
             $("#face").attr('src', 'http://kvfrans.com/static/image/' + (num+1) + ".png");
             $("#thetext").html(emojis[(num)]);
