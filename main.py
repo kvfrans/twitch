@@ -1,5 +1,7 @@
 import tensorflow as tf
 import numpy as np
+import os
+import json
 
 batchsize = 64
 numsteps = 20
@@ -32,6 +34,10 @@ outputs, last_state = tf.nn.seq2seq.rnn_decoder(inputs, initialstate, cell, loop
 # outputs: list(20), of [batchsize x outputsize], [64 x 200]
 # outputs are word embeddings
 
+# conc = tf.concat(2,outputs)
+# print conc.get_shape()
+# predictions = tf.matmul( tf.concat(2,outputs), softmax_w) + softmax_b
+
 # put all the timesteps/batches in one dimension
 output = tf.reshape(tf.concat(1,outputs), [-1, embedsize])
 
@@ -52,25 +58,51 @@ tvars = tf.trainable_variables()
 grads, _ = tf.clip_by_global_norm(tf.gradients(cost, tvars), 5)
 train_op = tf.train.AdamOptimizer(learningrate).apply_gradients(zip(grads, tvars))
 
-data = np.load("data.npy")
-num_batches = data.shape[0] / batchsize
-# makes sure the data ends with a full batch
-data = data [:num_batches*batchsize,:]
-data = np.split(data,num_batches)
-xdata = data
-ydata = np.copy(data)
-for i in xrange(num_batches):
-    ydata[i][:,:-1] = xdata[i][:,1:]
-    ydata[i][:,-1] = 0
-print xdata[45].shape
+with open("words.json") as json_file:
+    jsonfile = json.load(json_file)
+    wordmap = dict((y,x) for x,y in jsonfile.iteritems())
+    wordmap[0] = "-"
 
-with tf.Session() as sess:
-    saver = tf.train.Saver()
-    sess.run(tf.initialize_all_variables())
-    for e in xrange(10):
+train = False
+
+if train:
+    data = np.load("data.npy")
+    num_batches = data.shape[0] / batchsize
+    # makes sure the data ends with a full batch
+    data = data [:num_batches*batchsize,:]
+    data = np.split(data,num_batches)
+    xdata = data
+    ydata = np.copy(data)
+    for i in xrange(num_batches):
+        ydata[i][:,:-1] = xdata[i][:,1:]
+        ydata[i][:,-1] = 0
+    print xdata[45].shape
+
+    with tf.Session() as sess:
+        saver = tf.train.Saver()
+        sess.run(tf.initialize_all_variables())
+        for e in xrange(10):
+            sess.run(tf.assign(learningrate, 0.005))
+            for b in xrange(num_batches):
+                train_loss, _ = sess.run([cost, train_op], feed_dict={input_data: xdata[b], targets: ydata[b]})
+                print "%d: %f" % (b, train_loss)
+                if b % 100 == 0:
+                    saver.save(sess, os.getcwd()+"/training/train",global_step=(e*10000 + b))
+else:
+    with tf.Session() as sess:
+        saver = tf.train.Saver()
+        saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
         sess.run(tf.assign(learningrate, 0.005))
-        for b in xrange(num_batches):
-            train_loss, _ = sess.run([cost, train_op], feed_dict={input_data: xdata[b], targets: ydata[b]})
-            print "%d: %f" % (b, train_loss)
-            if b % 100 == 0:
-                saver.save(sess, os.getcwd()+"/training/train",global_step=(e*10000 + b))
+
+        state = cell.zero_state(batchsize, tf.float32).eval()
+        primer = np.zeros((64,20))
+        primer[:,:3] = [750,751,752]
+        nextindex = 2
+
+        for i in xrange(10):
+            guessed_logits = sess.run(logits, feed_dict={input_data: primer})
+            singled_logits = guessed_logits[:20,:]
+            bestoption = np.argmax(singled_logits,1)
+            primer[:,nextindex+1] = bestoption[nextindex]
+            nextindex += 1
+            print [wordmap[x] for x in primer[0,:].tolist()]
