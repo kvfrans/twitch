@@ -48,4 +48,8 @@ fs.readFile('database.txt', 'utf8', function (err,data) {
     // console.error(err)
     })
 
+    jsonfile.writeFile("words.json", topwords, function (err) {
+    // console.error(err)
+    })
+
 });

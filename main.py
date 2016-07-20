@@ -33,6 +33,10 @@ outputs, last_state = tf.nn.seq2seq.rnn_decoder(inputs, initialstate, cell, loop
 # outputs: list(20), of [batchsize x outputsize], [64 x 200]
 # outputs are word embeddings
 
+# conc = tf.concat(2,outputs)
+# print conc.get_shape()
+# predictions = tf.matmul( tf.concat(2,outputs), softmax_w) + softmax_b
+
 # put all the timesteps/batches in one dimension
 output = tf.reshape(tf.concat(1,outputs), [-1, embedsize])
 
