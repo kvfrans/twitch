@@ -37,27 +37,29 @@ output = tf.reshape(tf.concat(1,outputs), [-1, embedsize])
 logits = tf.matmul(output, softmax_w) + softmax_b
 final_state = last_state
 
-with tf.Session() as sess:
-    saver = tf.train.Saver(max_to_keep=3)
-    saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
+sess = tf.InteractiveSession()
+saver = tf.train.Saver(max_to_keep=3)
+saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
 
+def predict(starter):
     state = cell.zero_state(batchsize, tf.float32).eval()
-
-    starter = ""
     starterwords = starter.split(" ")
     nextword = 0
 
-    total = []
+    total = ""
 
     for word in starterwords:
-        total.append(word)
+        total += " " + word
         primer = np.zeros((1,1))
-        primer[:,:] = jsonfile[word]
+        if word in jsonfile:
+            primer[:,:] = jsonfile[word]
+        else:
+            primer[:,:] = 33234
         guessed_logits, state = sess.run([logits, final_state], feed_dict={input_data: primer, initialstate: state})
         nextword = np.argmax(guessed_logits,1)[0]
 
     for i in xrange(100):
-        total.append(wordmap[nextword])
+        total += " " + wordmap[nextword]
         primer = np.zeros((1,1))
         primer[:,:] = nextword
         guessed_logits, state = sess.run([logits, final_state], feed_dict={input_data: primer, initialstate: state})
@@ -65,4 +67,6 @@ with tf.Session() as sess:
         if nextword == 0:
             break
 
-    print total
+    return total
+
+# print predict("this game is")
