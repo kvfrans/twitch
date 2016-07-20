@@ -1,4 +1,5 @@
 var tmi = require("tmi.js")
+var fs = require('fs');
 
 
 var options = {
@@ -12,7 +13,7 @@ var options = {
         username: "TacoExplosion",
         password: "oauth:l0utik6fryye3pcus4gpo6uje5ba7f"
     },
-    channels: ["#tsm_bjergsen",
+    channels: ["nalcs2",
     "tsm_dyrus",
     "flosd",
     "trick2g",
@@ -33,227 +34,32 @@ var options = {
     "meteos",
     "anniebot",
     "imaqtpie",
-    "aphromoo"]
+    "aphromoo",
+    "riotgames"]
 };
 
-
-var emojis = ["4Head",
-"AMPEnergy",
-"AMPEnergyCherry",
-"ANELE",
-"ArgieB8",
-"ArsonNoSexy",
-"AsianGlow",
-"AthenaPMS",
-"BabyRage",
-"BatChest",
-"BCouch",
-"BCWarrior",
-"BibleThump",
-"BiersDerp",
-"BigBrother",
-"BionicBunion",
-"BlargNaut",
-"bleedPurple",
-"BloodTrail",
-"BORT",
-"BrainSlug",
-"BrokeBack",
-"BudBlast",
-"BuddhaBar",
-"BudStar",
-"ChefFrank",
-"cmonBruh",
-"CoolCat",
-"CorgiDerp",
-"CougarHunt",
-"DAESuppy",
-"DalLOVE",
-"DansGame",
-"DatSheffy",
-"DBstyle",
-"deExcite",
-"deIlluminati",
-"DendiFace",
-"DogFace",
-"DOOMGuy",
-"DoritosChip",
-"duDudu",
-"EagleEye",
-"EleGiggle",
-"FailFish",
-"FPSMarksman",
-"FrankerZ",
-"FreakinStinkin",
-"FUNgineer",
-"FunRun",
-"FutureMan",
-"FuzzyOtterOO",
-"GingerPower",
-"GrammarKing",
-"HassaanChop",
-"HassanChop",
-"HeyGuys",
-"HotPokket",
-"HumbleLife",
-"ItsBoshyTime",
-"Jebaited",
-"JKanStyle",
-"JonCarnage",
-"KAPOW",
-"Kappa",
-"KappaClaus",
-"KappaPride",
-"KappaRoss",
-"KappaWealth",
-"Keepo",
-"KevinTurtle",
-"Kippa",
-"Kreygasm",
-"Mau5",
-"mcaT",
-"MikeHogu",
-"MingLee",
-"MKXRaiden",
-"MKXScorpion",
-"MrDestructoid",
-"MVGame",
-"NinjaTroll",
-"NomNom",
-"NoNoSpot",
-"NotATK",
-"NotLikeThis",
-"OhMyDog",
-"OMGScoots",
-"OneHand",
-"OpieOP",
-"OptimizePrime",
-"OSfrog",
-"OSkomodo",
-"OSsloth",
-"panicBasket",
-"PanicVis",
-"PartyTime",
-"PazPazowitz",
-"PeoplesChamp",
-"PermaSmug",
-"PeteZaroll",
-"PeteZarollTie",
-"PicoMause",
-"PipeHype",
-"PJSalt",
-"PJSugar",
-"PMSTwin",
-"PogChamp",
-"Poooound",
-"PraiseIt",
-"PRChase",
-"PunchTrees",
-"PuppeyFace",
-"RaccAttack",
-"RalpherZ",
-"RedCoat",
-"ResidentSleeper",
-"riPepperonis",
-"RitzMitz",
-"RuleFive",
-"SeemsGood",
-"ShadyLulu",
-"ShazBotstix",
-"ShibeZ",
-"SmoocherZ",
-"SMOrc",
-"SMSkull",
-"SoBayed",
-"SoonerLater",
-"SriHead",
-"SSSsss",
-"StinkyCheese",
-"StoneLightning",
-"StrawBeary",
-"SuperVinlin",
-"SwiftRage",
-"TBCheesePull",
-"TBTacoLeft",
-"TBTacoRight",
-"TF2John",
-"TheRinger",
-"TheTarFu",
-"TheThing",
-"ThunBeast",
-"TinyFace",
-"TooSpicy",
-"TriHard",
-"TTours",
-"twitchRaid",
-"TwitchRPG",
-"UleetBackup",
-"UncleNox",
-"UnSane",
-"VaultBoy",
-"VoHiYo",
-"Volcania",
-"WholeWheat",
-"WinWaker",
-"WTRuck",
-"WutFace",
-"YouWHY"]
 var client = new tmi.client(options);
 
-// Connect the client to the server..
 client.connect();
-
-// var data  = {}
-var data = require('./data.json');
-
-// for(var i = 0; i < emojis.length; i++)
-// {
-//     data[emojis[i]] = [];
-// }
-
 var counter = 0;
 
 var jsonfile = require('jsonfile')
 var file = 'data.json'
 
 
+var totalstring = ""
 
 client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
     if (self) return;
+    message = message.replace(/[^\w\s]/gi, '')
+    message = message + "<eos>"
+    totalstring += message
+    console.log(message);
 
-    var lastemote = "none";
-
-    for(var i = 0; i < emojis.length; i++)
+    counter++;
+    if(counter % 200 == 0)
     {
-        if(message.indexOf(emojis[i]) != -1)
-        {
-            message = message.split(emojis[i]).join("");
-
-            lastemote = emojis[i];
-        }
+    	fs.writeFile("database.txt", totalstring, function(err) {});
     }
-    if(message.indexOf("\'" == -1 && message.indexOf("\"" == -1)))
-    {
-        if(lastemote != "none" && message.length > 3)
-        {
-            console.log(lastemote + ": " + message);
-            // console.log("lastemote is " + lastemote);
-            data[lastemote].push(message);
-            // console.log(data);
-            time = new Date().toLocaleTimeString('en-US', { hour12: false,
-                                             hour: "numeric",
-                                             minute: "numeric",
-                                             second:"numeric"});
-            console.log(time + " " + counter);
-            if(counter % 50 == 0)
-            {
-                jsonfile.writeFile(file, data, function (err) {
-                  // console.error(err)
-                })
-            }
-            counter++;
-        }
-    }
-
 });
