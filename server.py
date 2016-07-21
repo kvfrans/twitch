@@ -19,7 +19,8 @@ def enable_cors(fn):
 @post('/predict') # or @route('/login', method='POST')
 @enable_cors
 def predict_post():
-    return predict(request.forms.get('message'))
+    print request.forms.get('message')
+    return predict()
 
 @post('/temp') # or @route('/login', method='POST')
 @enable_cors
