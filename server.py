@@ -1,5 +1,5 @@
 from sample import *
-from bottle import route, run, template, static_file, get, post, request, reponse
+from bottle import route, run, template, static_file, get, post, request, response
 
 # the decorator
 def enable_cors(fn):
