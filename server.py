@@ -10,6 +10,8 @@ def enable_cors(fn):
         response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
+        print request.forms.get('message')
+
         if bottle.request.method != 'OPTIONS':
             # actual request; reply with the actual response
             return fn(*args, **kwargs)
