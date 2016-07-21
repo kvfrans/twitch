@@ -16,11 +16,13 @@ def enable_cors(fn):
 
     return _enable_cors
 
-@post('/predict') # or @route('/login', method='POST')
+app = bottle.app()
+
+@app.route('/predict', method=['OPTIONS', 'POST'])
 @enable_cors
 def predict_post():
     print request.forms.get('message')
-    return predict()
+    return "as"
 
 @post('/temp') # or @route('/login', method='POST')
 @enable_cors
