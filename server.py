@@ -1,4 +1,5 @@
 from sample import *
+import bottle
 from bottle import route, run, template, static_file, get, post, request, response
 
 # the decorator
