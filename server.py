@@ -24,7 +24,7 @@ def predict_post():
 @post('/temp') # or @route('/login', method='POST')
 @enable_cors
 def tempp():
-    return "got it oss"
+    return predict(request.forms.get('message'))
 
 @get('/') # or @route('/login', method='POST')
 @enable_cors
