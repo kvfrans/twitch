@@ -8,7 +8,7 @@ Live demo available on [the post](http://kvfrans.com/simulating-twitch-chat-with
 
 ###How to run it
 
-1. Run `node scrape.js` to scrape messages from Twitch's IRC channels. You can also use the provided `database.txt` which I collected by running the scraper overnight for ~8 hours. Fill in the channels array with a list of streamers you want to scrape from.
+1. Edit scrape.js to supply your own Twitch IRC Token and username. You can get the oauth token from http://twitchapps.com/tmi/. Run `node scrape.js` to scrape messages from Twitch's IRC channels. Alternatively, you can also use the provided `database.txt` which I collected by running the scraper overnight for ~8 hours. Fill in the channels array with a list of streamers you want to scrape from.
 
 2. Run `node topwords.js` to format a vocabulary dictionary (`words.json`) that maps IDs to each word that appeared at least five times.
 
