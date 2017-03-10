@@ -15,25 +15,24 @@ embedsize = 200
 numlayers = 2
 vocabsize = 33235
 keep_prob = 0.0
-
 input_data = tf.placeholder(tf.int32,[batchsize,numsteps])
 
 
-lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(embedsize)
-cell = tf.nn.rnn_cell.MultiRNNCell([lstm_cell] * numlayers)
+lstm_cell = tf.contrib.rnn.BasicLSTMCell(embedsize)
+cell = tf.contrib.rnn.MultiRNNCell([lstm_cell] * numlayers)
 initialstate = cell.zero_state(batchsize, tf.float32)
 
 with tf.variable_scope("rnnlm") as scope:
     with tf.device("/cpu:0"):
         embedding = tf.get_variable("embedding", [vocabsize, embedsize])
-        inputs = tf.split(1, numsteps, tf.nn.embedding_lookup(embedding, input_data))
+        inputs = tf.split(axis=1, num_or_size_splits=numsteps, value=tf.nn.embedding_lookup(embedding, input_data))
         inputs = [tf.squeeze(input_, [1]) for input_ in inputs]
 
     softmax_w = tf.get_variable("softmax_w", [embedsize, vocabsize])
     softmax_b = tf.get_variable("softmax_b", [vocabsize])
 
-outputs, last_state = tf.nn.seq2seq.rnn_decoder(inputs, initialstate, cell, loop_function=None, scope='rnnlm')
-output = tf.reshape(tf.concat(1,outputs), [-1, embedsize])
+outputs, last_state = tf.contrib.legacy_seq2seq.rnn_decoder(inputs, initialstate, cell, loop_function=None, scope='rnnlm')
+output = tf.reshape(tf.concat(axis=1,values=outputs), [-1, embedsize])
 logits = tf.matmul(output, softmax_w) + softmax_b
 final_state = last_state
 
@@ -42,7 +41,10 @@ saver = tf.train.Saver(max_to_keep=3)
 saver.restore(sess, tf.train.latest_checkpoint(os.getcwd()+"/training/"))
 
 def predict(starter):
-    state = cell.zero_state(batchsize, tf.float32).eval()
+    # state = cell.zero_state(batchsize, tf.float32).eval()
+    # state = tf.convert_to_tensor(cell.zero_state(batchsize, tf.float32))
+    # state.eval()
+    state = tf.get_default_session().run(cell.zero_state(batchsize, tf.float32))
     starterwords = starter.split(" ")
     nextword = 0
 
